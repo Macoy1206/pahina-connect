@@ -12,23 +12,43 @@ public class DBConnection {
     private static final String PASSWORD;
 
     static {
-        // Railway provides MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD
-        // Local development uses hardcoded defaults
         String mysqlUrl  = System.getenv("MYSQL_URL");
+        if (mysqlUrl == null || mysqlUrl.isEmpty()) {
+            mysqlUrl = System.getenv("MYSQL_PUBLIC_URL");
+        }
         String mysqlUser = System.getenv("MYSQL_USER");
         String mysqlPass = System.getenv("MYSQL_PASSWORD");
 
+        String tempUrl, tempUser, tempPass;
+
         if (mysqlUrl != null && !mysqlUrl.isEmpty()) {
-            // Railway environment
-            URL      = mysqlUrl;
-            USER     = mysqlUser != null ? mysqlUser : "root";
-            PASSWORD = mysqlPass != null ? mysqlPass : "";
+            if (mysqlUrl.startsWith("mysql://")) {
+                try {
+                    String withoutScheme = mysqlUrl.substring("mysql://".length());
+                    String userInfo = withoutScheme.substring(0, withoutScheme.indexOf('@'));
+                    String hostAndDb = withoutScheme.substring(withoutScheme.indexOf('@') + 1);
+                    tempUser = userInfo.contains(":") ? userInfo.substring(0, userInfo.indexOf(':')) : userInfo;
+                    tempPass = userInfo.contains(":") ? userInfo.substring(userInfo.indexOf(':') + 1) : "";
+                    tempUrl  = "jdbc:mysql://" + hostAndDb + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
+                } catch (Exception e) {
+                    tempUrl  = "jdbc:mysql://" + mysqlUrl.replace("mysql://", "") + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
+                    tempUser = mysqlUser != null ? mysqlUser : "root";
+                    tempPass = mysqlPass != null ? mysqlPass : "";
+                }
+            } else {
+                tempUrl  = mysqlUrl;
+                tempUser = mysqlUser != null ? mysqlUser : "root";
+                tempPass = mysqlPass != null ? mysqlPass : "";
+            }
         } else {
-            // Local development
-            URL      = "jdbc:mysql://127.0.0.1:3306/pahina_connect?useSSL=false&serverTimezone=Asia/Manila&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
-            USER     = "root";
-            PASSWORD = "root";
+            tempUrl  = "jdbc:mysql://127.0.0.1:3306/pahina_connect?useSSL=false&serverTimezone=Asia/Manila&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
+            tempUser = "root";
+            tempPass = "root";
         }
+
+        URL      = tempUrl;
+        USER     = tempUser;
+        PASSWORD = tempPass;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
