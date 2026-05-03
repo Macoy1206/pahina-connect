@@ -73,6 +73,9 @@ public class DBConnection {
 
         System.out.println("[DBConnection] URL: " + URL);
         System.out.println("[DBConnection] USER: " + USER);
+        System.out.println("[DBConnection] PASSWORD length: " + (PASSWORD != null ? PASSWORD.length() : "null"));
+        System.out.println("[DBConnection] MYSQL_PASSWORD env: " + (System.getenv("MYSQL_PASSWORD") != null ? "SET(len=" + System.getenv("MYSQL_PASSWORD").length() + ")" : "NOT SET"));
+        System.out.println("[DBConnection] MYSQLPASSWORD env: " + (System.getenv("MYSQLPASSWORD") != null ? "SET(len=" + System.getenv("MYSQLPASSWORD").length() + ")" : "NOT SET"));
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
