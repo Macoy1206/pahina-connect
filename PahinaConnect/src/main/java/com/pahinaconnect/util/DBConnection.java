@@ -31,6 +31,15 @@ public class DBConnection {
         String mysqlUser = System.getenv("MYSQL_USER");
         String mysqlPass = System.getenv("MYSQL_PASSWORD");
 
+        // If MYSQL_PASSWORD not set, try MYSQLPASSWORD (Railway's auto variable)
+        if (mysqlPass == null || mysqlPass.isEmpty()) {
+            mysqlPass = System.getenv("MYSQLPASSWORD");
+        }
+        // Last resort: use known Railway password directly
+        if (mysqlPass == null || mysqlPass.isEmpty()) {
+            mysqlPass = "qyRYaiYeSHxKugwLhvIppSTPZnLLBePd";
+        }
+
         if (mysqlUrl != null && !mysqlUrl.isEmpty()) {
             if (mysqlUrl.startsWith("mysql://")) {
                 // Convert mysql://user:pass@host:port/db to jdbc format
@@ -59,7 +68,7 @@ public class DBConnection {
             tempUrl  = "jdbc:mysql://" + railwayHost + ":" + port + "/" + db +
                        "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
             tempUser = railwayUser != null ? railwayUser : "root";
-            tempPass = railwayPass != null ? railwayPass : "";
+            tempPass = railwayPass != null ? railwayPass : "qyRYaiYeSHxKugwLhvIppSTPZnLLBePd";
         } else {
             // Local development
             tempUrl  = "jdbc:mysql://127.0.0.1:3306/pahina_connect?useSSL=false&serverTimezone=Asia/Manila&allowPublicKeyRetrieval=true&characterEncoding=UTF-8";
