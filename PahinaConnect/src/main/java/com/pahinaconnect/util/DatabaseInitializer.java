@@ -195,6 +195,17 @@ public class DatabaseInitializer {
                 "'$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO', 1)"
             );
 
+            // Insert existing student accounts (password: Student@123 for sample accounts)
+            st.executeUpdate(
+                "INSERT IGNORE INTO users (student_id, first_name, last_name, middle_name, email, phone, address, date_of_birth, gender, role, password, is_active) VALUES " +
+                "('STU0001234','Juan','Dela Cruz','Santos','juan.delacruz@student.com','09171234567','123 Rizal St., Manila','2000-01-15','Male','student','$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO',1)," +
+                "('STU0001235','Maria','Santos','Garcia','maria.santos@student.com','09181234567','456 Bonifacio Ave., Quezon City','2001-03-20','Female','student','$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO',1)," +
+                "('STU0001236','Pedro','Reyes','Lopez','pedro.reyes@student.com','09191234567','789 Mabini St., Makati','1999-07-10','Male','student','$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO',1)," +
+                "('STU0001237','Ana','Gonzales','Ramos','ana.gonzales@student.com','09201234567','321 Luna St., Pasig','2002-05-25','Female','student','$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO',1)," +
+                "('STU0001238','Jose','Mendoza','Cruz','jose.mendoza@student.com','09211234567','654 Aguinaldo Rd., Taguig','2000-11-30','Male','student','$2a$10$v4c1rcKKO/sWN0cmzuZa1eRNyr4FbJ9UCvx3tm2UZEarLebi31bBO',1)," +
+                "('STU5757207','Ronald','Cabalde',NULL,'macoycabalde@gmail.com','09615150075','Purok 3 Barangay Pansol Pila, Laguna','2000-01-01','Male','student','$2a$10$FsNGD/49JaHe3WGxDwL5Ru7ydTWCIvNiy93SGcEkGCWviI.wZE7Gu',1)"
+            );
+
             System.out.println("[DatabaseInitializer] Database initialized successfully.");
 
         } catch (SQLException e) {
