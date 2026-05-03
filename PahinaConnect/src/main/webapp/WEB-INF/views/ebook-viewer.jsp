@@ -31,7 +31,7 @@
 <body>
   <div class="reader-controls">
     <div class="d-flex align-center gap-2">
-      <a href="javascript:history.back()" class="reader-btn">&#8592; Back</a>
+      <a href="${pageContext.request.contextPath}/search" class="reader-btn">&#8592; Back to Books</a>
       <div class="book-info">
         <span><c:out value="${book.title}"/></span>
         <small>by <c:out value="${book.authorName}"/></small>
@@ -50,7 +50,7 @@
   <c:if test="${not empty error}">
     <div style="margin-top:70px;padding:20px;color:#fff;text-align:center;">
       <p>${error}</p>
-      <a href="javascript:history.back()" class="reader-btn">&#8592; Go Back</a>
+      <a href="${pageContext.request.contextPath}/search" class="reader-btn">&#8592; Go Back to Books</a>
     </div>
   </c:if>
 
