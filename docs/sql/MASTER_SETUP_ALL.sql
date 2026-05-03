@@ -1,7 +1,7 @@
 -- ============================================================
 -- MASTER SETUP - RUN THIS IN MYSQL WORKBENCH
 -- ============================================================
-USE pahina_connect;
+USE railway;
 SET SQL_SAFE_UPDATES = 0;
 
 -- STEP 1: CLEAR ALL DATA
