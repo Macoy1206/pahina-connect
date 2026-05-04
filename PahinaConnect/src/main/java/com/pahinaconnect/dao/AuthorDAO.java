@@ -14,11 +14,18 @@ public class AuthorDAO {
 
     public List<Author> getAll() throws SQLException {
         List<Author> list = new ArrayList<>();
+        // Order alphabetically by last name then first name, no duplicates
         String sql = "SELECT * FROM authors ORDER BY last_name, first_name";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) list.add(mapAuthor(rs));
+            java.util.Set<String> seen = new java.util.HashSet<>();
+            while (rs.next()) {
+                String key = rs.getString("first_name").toLowerCase() + "|" + rs.getString("last_name").toLowerCase();
+                if (seen.add(key)) { // only add if not seen before
+                    list.add(mapAuthor(rs));
+                }
+            }
         }
         return list;
     }
@@ -35,6 +42,15 @@ public class AuthorDAO {
     }
 
     public boolean add(Author author) throws SQLException {
+        // Check for duplicate before inserting
+        String checkSql = "SELECT id FROM authors WHERE LOWER(first_name)=LOWER(?) AND LOWER(last_name)=LOWER(?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement check = conn.prepareStatement(checkSql)) {
+            check.setString(1, author.getFirstName());
+            check.setString(2, author.getLastName());
+            ResultSet rs = check.executeQuery();
+            if (rs.next()) return false; // Already exists
+        }
         String sql = "INSERT INTO authors (first_name, last_name, bio, nationality) VALUES (?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
