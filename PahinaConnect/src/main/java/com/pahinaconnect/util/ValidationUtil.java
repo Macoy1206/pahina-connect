@@ -22,7 +22,22 @@ public class ValidationUtil {
     }
 
     public static boolean isValidPhone(String phone) {
-        return phone != null && PHONE_PATTERN.matcher(phone.trim()).matches();
+        if (phone == null) return false;
+        String trimmed = phone.trim();
+        if (!PHONE_PATTERN.matcher(trimmed).matches()) return false;
+        // Reject numbers with more than 2 consecutive identical digits
+        // e.g. 09000000000 or 09111234567 are invalid
+        String digits = trimmed.replaceAll("\\D", "");
+        int count = 1;
+        for (int i = 1; i < digits.length(); i++) {
+            if (digits.charAt(i) == digits.charAt(i - 1)) {
+                count++;
+                if (count > 2) return false;
+            } else {
+                count = 1;
+            }
+        }
+        return true;
     }
 
     public static boolean isValidPassword(String password) {

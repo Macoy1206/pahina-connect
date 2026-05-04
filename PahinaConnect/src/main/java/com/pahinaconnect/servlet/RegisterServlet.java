@@ -42,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
         if (!ValidationUtil.isNotEmpty(firstName))  errors.append("First name is required. ");
         if (!ValidationUtil.isNotEmpty(lastName))   errors.append("Last name is required. ");
         if (!ValidationUtil.isValidEmail(email))    errors.append("Only Gmail addresses are accepted (e.g. juan@gmail.com). ");
-        if (!ValidationUtil.isValidPhone(phone))    errors.append("Valid Philippine phone number is required (e.g. 09XXXXXXXXX). ");
+        if (!ValidationUtil.isValidPhone(phone))    errors.append("Valid Philippine phone number is required. No more than 2 consecutive identical digits (e.g. 09192234567). ");
         if (!ValidationUtil.isNotEmpty(address))    errors.append("Address is required. ");
         if (!ValidationUtil.isNotEmpty(dob))        errors.append("Date of birth is required. ");
         if (!ValidationUtil.isNotEmpty(gender))     errors.append("Gender is required. ");

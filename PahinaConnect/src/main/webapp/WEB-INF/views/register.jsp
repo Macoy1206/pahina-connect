@@ -109,7 +109,7 @@
           <input type="tel" name="phone" id="phoneInput" class="form-control"
                  placeholder="09XXXXXXXXX" required maxlength="20"
                  value="${param.phone}" style="width:100%;box-sizing:border-box">
-          <span class="form-hint" id="phoneHint">Format: 09XXXXXXXXX or +639XXXXXXXXX (11 digits)</span>
+          <span class="form-hint" id="phoneHint">Format: 09XXXXXXXXX or +639XXXXXXXXX • Max 2 consecutive same digits</span>
         </div>
 
         <div class="form-group">
@@ -215,6 +215,20 @@ function validatePhone() {
   if (!/^(09|\+639)\d{9}$/.test(val)) {
     setInvalid(input, hint, '❌ Format: 09XXXXXXXXX or +639XXXXXXXXX (11 digits)');
     return false;
+  }
+  // Check for more than 2 consecutive identical digits
+  var digits = val.replace(/\D/g, '');
+  var count = 1;
+  for (var i = 1; i < digits.length; i++) {
+    if (digits[i] === digits[i-1]) {
+      count++;
+      if (count > 2) {
+        setInvalid(input, hint, '❌ Phone number cannot have more than 2 consecutive identical digits (e.g. 09192234567 ✓, 09111234567 ✗)');
+        return false;
+      }
+    } else {
+      count = 1;
+    }
   }
   setValid(input, hint, '✓ Valid Philippine number'); return true;
 }
