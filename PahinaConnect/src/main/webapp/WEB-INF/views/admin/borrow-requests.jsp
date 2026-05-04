@@ -71,7 +71,7 @@
                       <div class="d-flex gap-1">
                         <!-- Approve button -->
                         <button class="btn btn-sm btn-primary"
-                                onclick="approveRequest(${r.id}, '${r.studentName.replace("'","\\'")}', '${r.bookTitle.replace("'","\\'")}')">
+                                onclick="approveRequest(${r.id}, '${r.studentName.replace("'","\\'")}', '${r.bookTitle.replace("'","\\'")}', '<fmt:formatDate value="${r.preferredReturnDate}" pattern="MMM dd, yyyy"/>')">
                           ✅ Approve
                         </button>
                         <!-- Reject button -->
@@ -159,15 +159,6 @@
       <form method="post" action="${pageContext.request.contextPath}/admin/borrow-requests">
         <input type="hidden" name="action" value="approve">
         <input type="hidden" name="requestId" id="approveRequestId">
-        <div class="form-group">
-          <label class="form-label">Loan Duration <span class="required">*</span></label>
-          <select name="dueDays" class="form-control">
-            <option value="7">7 days (1 week)</option>
-            <option value="14" selected>14 days (2 weeks)</option>
-            <option value="21">21 days (3 weeks)</option>
-            <option value="30">30 days (1 month)</option>
-          </select>
-        </div>
         <div class="modal-footer" style="padding:0;border:none;margin-top:16px">
           <button type="button" class="btn btn-outline" data-modal-close>Cancel</button>
           <button type="submit" class="btn btn-primary">✅ Approve & Issue Book</button>
@@ -179,11 +170,15 @@
 
 <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 <script>
-function approveRequest(id, student, book) {
+function approveRequest(id, student, book, dueDate) {
   document.getElementById('approveRequestId').value = id;
+  var dueDateHtml = dueDate
+    ? '<p style="margin-top:6px"><strong>Due Date:</strong> <span style="color:var(--danger);font-weight:700">' + dueDate + '</span></p>'
+    : '';
   document.getElementById('approveDetails').innerHTML =
     '<p><strong>Student:</strong> ' + student + '</p>' +
-    '<p style="margin-top:6px"><strong>Book:</strong> ' + book + '</p>';
+    '<p style="margin-top:6px"><strong>Book:</strong> ' + book + '</p>' +
+    dueDateHtml;
   openModal('approveModal');
 }
 </script>

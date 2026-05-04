@@ -37,6 +37,7 @@ public class StudentProfileServlet extends HttpServlet {
         String firstName  = req.getParameter("firstName");
         String lastName   = req.getParameter("lastName");
         String middleName = req.getParameter("middleName");
+        String suffix     = req.getParameter("suffix");
         String phone      = req.getParameter("phone");
         String address    = req.getParameter("address");
         String dob        = req.getParameter("dateOfBirth");
@@ -84,6 +85,7 @@ public class StudentProfileServlet extends HttpServlet {
             user.setFirstName(ValidationUtil.sanitize(firstName));
             user.setLastName(ValidationUtil.sanitize(lastName));
             user.setMiddleName(ValidationUtil.sanitize(middleName));
+            user.setSuffix(suffix != null ? suffix.trim() : null);
             user.setPhone(phone.trim());
             user.setAddress(ValidationUtil.sanitize(address));
             if (dob != null && !dob.isEmpty()) user.setDateOfBirth(Date.valueOf(dob));

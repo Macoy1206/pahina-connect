@@ -22,6 +22,7 @@ public class DatabaseInitializer {
                 "first_name VARCHAR(100) NOT NULL," +
                 "last_name VARCHAR(100) NOT NULL," +
                 "middle_name VARCHAR(100)," +
+                "suffix VARCHAR(20)," +
                 "email VARCHAR(150) UNIQUE NOT NULL," +
                 "phone VARCHAR(20)," +
                 "address TEXT," +
@@ -37,6 +38,13 @@ public class DatabaseInitializer {
                 "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                 ")"
             );
+
+            // Add suffix column if it doesn't exist (for existing databases)
+            try {
+                st.executeUpdate("ALTER TABLE users ADD COLUMN suffix VARCHAR(20) AFTER middle_name");
+            } catch (Exception ignored) {
+                // Column already exists, ignore
+            }
 
             // Categories table
             st.executeUpdate(

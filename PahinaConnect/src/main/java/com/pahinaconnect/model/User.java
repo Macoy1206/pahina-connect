@@ -9,6 +9,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String middleName;
+    private String suffix;
     private String email;
     private String phone;
     private String address;
@@ -38,9 +39,13 @@ public class User {
     public String getMiddleName() { return middleName; }
     public void setMiddleName(String middleName) { this.middleName = middleName; }
 
+    public String getSuffix() { return suffix; }
+    public void setSuffix(String suffix) { this.suffix = suffix; }
+
     public String getFullName() {
         String mid = (middleName != null && !middleName.isEmpty()) ? " " + middleName + " " : " ";
-        return firstName + mid + lastName;
+        String suf = (suffix != null && !suffix.isEmpty()) ? " " + suffix : "";
+        return firstName + mid + lastName + suf;
     }
 
     public String getEmail() { return email; }

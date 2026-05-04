@@ -1,7 +1,18 @@
 package com.pahinaconnect.servlet.admin;
 
-import com.pahinaconnect.dao.*;
-import com.pahinaconnect.model.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+import com.pahinaconnect.dao.BookDAO;
+import com.pahinaconnect.dao.BookIssueDAO;
+import com.pahinaconnect.dao.BorrowRequestDAO;
+import com.pahinaconnect.dao.UserDAO;
+import com.pahinaconnect.model.Book;
+import com.pahinaconnect.model.BookIssue;
+import com.pahinaconnect.model.BorrowRequest;
+import com.pahinaconnect.model.User;
 import com.pahinaconnect.util.DBConnection;
 import com.pahinaconnect.util.EmailUtil;
 
@@ -9,10 +20,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.Calendar;
 
 public class BorrowRequestManageServlet extends HttpServlet {
 
@@ -73,12 +80,16 @@ public class BorrowRequestManageServlet extends HttpServlet {
             return;
         }
 
-        String dueDaysParam = req.getParameter("dueDays");
-        int dueDays = (dueDaysParam != null && !dueDaysParam.isEmpty()) ? Integer.parseInt(dueDaysParam) : 14;
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, dueDays);
-        Timestamp dueDate = new Timestamp(cal.getTimeInMillis());
+        // Use the student's preferred return date as the due date
+        Timestamp dueDate;
+        if (borrowReq.getPreferredReturnDate() != null) {
+            dueDate = new Timestamp(borrowReq.getPreferredReturnDate().getTime());
+        } else {
+            // Fallback: 14 days from today if no preferred date was set
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 14);
+            dueDate = new Timestamp(cal.getTimeInMillis());
+        }
 
         // Issue the book transactionally
         try (Connection conn = DBConnection.getConnection()) {

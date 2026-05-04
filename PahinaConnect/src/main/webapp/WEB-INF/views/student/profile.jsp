@@ -125,6 +125,18 @@
                 <input type="text" name="middleName" class="form-control capitalize-input" maxlength="100"
                        value="${sessionScope.loggedUser.middleName}">
               </div>
+              <div class="form-group">
+                <label class="form-label">Suffix <span style="color:var(--text-light);font-weight:400">(optional)</span></label>
+                <select name="suffix" class="form-control">
+                  <option value="" ${empty sessionScope.loggedUser.suffix ? 'selected' : ''}>None</option>
+                  <option value="Jr." ${sessionScope.loggedUser.suffix eq 'Jr.' ? 'selected' : ''}>Jr. (Junior)</option>
+                  <option value="Sr." ${sessionScope.loggedUser.suffix eq 'Sr.' ? 'selected' : ''}>Sr. (Senior)</option>
+                  <option value="I"   ${sessionScope.loggedUser.suffix eq 'I'   ? 'selected' : ''}>I (The First)</option>
+                  <option value="II"  ${sessionScope.loggedUser.suffix eq 'II'  ? 'selected' : ''}>II (The Second)</option>
+                  <option value="III" ${sessionScope.loggedUser.suffix eq 'III' ? 'selected' : ''}>III (The Third)</option>
+                  <option value="IV"  ${sessionScope.loggedUser.suffix eq 'IV'  ? 'selected' : ''}>IV (The Fourth)</option>
+                </select>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Date of Birth</label>

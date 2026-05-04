@@ -76,6 +76,19 @@
                  placeholder="Santos" maxlength="100" value="${param.middleName}">
         </div>
 
+        <div class="form-group">
+          <label class="form-label">Suffix <span style="color:var(--text-light);font-weight:400">(optional)</span></label>
+          <select name="suffix" id="suffix" class="form-control">
+            <option value="" ${empty param.suffix ? 'selected' : ''}>None</option>
+            <option value="Jr." ${param.suffix eq 'Jr.' ? 'selected' : ''}>Jr. (Junior)</option>
+            <option value="Sr." ${param.suffix eq 'Sr.' ? 'selected' : ''}>Sr. (Senior)</option>
+            <option value="I"   ${param.suffix eq 'I'   ? 'selected' : ''}>I (The First)</option>
+            <option value="II"  ${param.suffix eq 'II'  ? 'selected' : ''}>II (The Second)</option>
+            <option value="III" ${param.suffix eq 'III' ? 'selected' : ''}>III (The Third)</option>
+            <option value="IV"  ${param.suffix eq 'IV'  ? 'selected' : ''}>IV (The Fourth)</option>
+          </select>
+        </div>
+
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Date of Birth <span class="required">*</span></label>

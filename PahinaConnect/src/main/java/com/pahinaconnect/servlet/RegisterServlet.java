@@ -29,6 +29,7 @@ public class RegisterServlet extends HttpServlet {
         String firstName  = req.getParameter("firstName");
         String lastName   = req.getParameter("lastName");
         String middleName = req.getParameter("middleName");
+        String suffix     = req.getParameter("suffix");
         String email      = req.getParameter("email");
         String phone      = req.getParameter("phone");
         String address    = req.getParameter("address");
@@ -69,6 +70,7 @@ public class RegisterServlet extends HttpServlet {
             user.setFirstName(ValidationUtil.sanitize(firstName));
             user.setLastName(ValidationUtil.sanitize(lastName));
             user.setMiddleName(ValidationUtil.sanitize(middleName));
+            user.setSuffix(suffix != null ? suffix.trim() : null);
             user.setEmail(email.trim().toLowerCase());
             user.setPhone(phone.trim());
             user.setAddress(ValidationUtil.sanitize(address));

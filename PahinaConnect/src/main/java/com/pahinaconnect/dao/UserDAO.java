@@ -1,12 +1,17 @@
 package com.pahinaconnect.dao;
 
-import com.pahinaconnect.model.User;
-import com.pahinaconnect.util.DBConnection;
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import com.pahinaconnect.model.User;
+import com.pahinaconnect.util.DBConnection;
 
 public class UserDAO {
 
@@ -50,20 +55,21 @@ public class UserDAO {
     }
 
     public int register(User user) throws SQLException {
-        String sql = "INSERT INTO users (student_id, first_name, last_name, middle_name, email, phone, address, date_of_birth, gender, role, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO users (student_id, first_name, last_name, middle_name, suffix, email, phone, address, date_of_birth, gender, role, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getStudentId());
             ps.setString(2, user.getFirstName());
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getMiddleName());
-            ps.setString(5, user.getEmail());
-            ps.setString(6, user.getPhone());
-            ps.setString(7, user.getAddress());
-            ps.setDate(8, user.getDateOfBirth());
-            ps.setString(9, user.getGender());
-            ps.setString(10, user.getRole() != null ? user.getRole() : "student");
-            ps.setString(11, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10)));
+            ps.setString(5, user.getSuffix());
+            ps.setString(6, user.getEmail());
+            ps.setString(7, user.getPhone());
+            ps.setString(8, user.getAddress());
+            ps.setDate(9, user.getDateOfBirth());
+            ps.setString(10, user.getGender());
+            ps.setString(11, user.getRole() != null ? user.getRole() : "student");
+            ps.setString(12, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10)));
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) return rs.getInt(1);
@@ -72,18 +78,19 @@ public class UserDAO {
     }
 
     public boolean updateProfile(User user) throws SQLException {
-        String sql = "UPDATE users SET first_name=?, last_name=?, middle_name=?, phone=?, address=?, date_of_birth=?, gender=?, profile_picture=? WHERE id=?";
+        String sql = "UPDATE users SET first_name=?, last_name=?, middle_name=?, suffix=?, phone=?, address=?, date_of_birth=?, gender=?, profile_picture=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getMiddleName());
-            ps.setString(4, user.getPhone());
-            ps.setString(5, user.getAddress());
-            ps.setDate(6, user.getDateOfBirth());
-            ps.setString(7, user.getGender());
-            ps.setString(8, user.getProfilePicture());
-            ps.setInt(9, user.getId());
+            ps.setString(4, user.getSuffix());
+            ps.setString(5, user.getPhone());
+            ps.setString(6, user.getAddress());
+            ps.setDate(7, user.getDateOfBirth());
+            ps.setString(8, user.getGender());
+            ps.setString(9, user.getProfilePicture());
+            ps.setInt(10, user.getId());
             return ps.executeUpdate() > 0;
         }
     }
@@ -201,6 +208,7 @@ public class UserDAO {
         u.setFirstName(rs.getString("first_name"));
         u.setLastName(rs.getString("last_name"));
         u.setMiddleName(rs.getString("middle_name"));
+        u.setSuffix(rs.getString("suffix"));
         u.setEmail(rs.getString("email"));
         u.setPhone(rs.getString("phone"));
         u.setAddress(rs.getString("address"));
