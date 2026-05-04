@@ -334,6 +334,11 @@ public class DatabaseInitializer {
                 "('9780140449068','Around the World in 80 Days',15,17,'Penguin Classics',1872,'Penguin Edition',5,5,'Phileas Fogg bets he can travel around the entire world in just 80 days.','ebook_50.html','Shelf K-6','English',256,'https://covers.openlibrary.org/b/isbn/9780140449068-L.jpg')"
             );
 
+            // Fix available_copies to match total_copies for all books (in case they got set to 0)
+            st.executeUpdate(
+                "UPDATE books SET available_copies = total_copies WHERE available_copies = 0 AND total_copies > 0"
+            );
+
             System.out.println("[DatabaseInitializer] Database initialized successfully.");
 
         } catch (SQLException e) {
