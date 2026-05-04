@@ -281,15 +281,7 @@
             <div id="bookQRContainer" style="background:var(--cream);border-radius:var(--radius);padding:16px;display:inline-block">
               <div class="spinner"></div>
             </div>
-            <p style="font-size:0.75rem;color:var(--text-light);margin-top:8px">Scan to identify this book</p>
-          </div>
-
-          <div id="ebookQRSection" style="margin-top:20px;display:none">
-            <p style="font-size:0.85rem;color:var(--gold-dark);margin-bottom:10px;font-weight:600">📄 E-Book QR Code</p>
-            <div id="ebookQRContainer" style="background:#FEF3E2;border:2px solid var(--gold);border-radius:var(--radius);padding:16px;display:inline-block">
-              <div class="spinner"></div>
-            </div>
-            <p style="font-size:0.75rem;color:var(--text-light);margin-top:8px">Scan to access the e-book</p>
+            <p style="font-size:0.75rem;color:var(--text-light);margin-top:8px">Scan to open Pahina Connect website</p>
           </div>
         </div>
       </div>
@@ -435,15 +427,9 @@ function showBookDetail(id, title, author, category, isbn, available, total, loc
       bookQR.innerHTML = '<img src="' + contextPath + '/uploads/qrcodes/qr_' + id + '.png" style="width:180px;height:180px" onerror="this.parentElement.innerHTML=\'<p style=color:var(--text-light)>QR not available</p>\'" alt="Book QR">';
     });
 
-  // E-book QR code
+  // E-book QR code - removed, only book QR code is shown
   var ebookSection = document.getElementById('ebookQRSection');
-  if (ebookFile) {
-    ebookSection.style.display = 'block';
-    var ebookQR = document.getElementById('ebookQRContainer');
-    ebookQR.innerHTML = '<img src="' + contextPath + '/uploads/qrcodes/qr_ebook_' + id + '.png" style="width:180px;height:180px" onerror="this.style.display=\'none\'" alt="E-Book QR">';
-  } else {
-    ebookSection.style.display = 'none';
-  }
+  if (ebookSection) ebookSection.style.display = 'none';
 
   openModal('bookDetailModal');
 }// ── Live search filter ──────────────────────────────────────

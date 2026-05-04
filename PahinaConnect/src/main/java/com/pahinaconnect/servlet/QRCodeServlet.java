@@ -62,21 +62,19 @@ public class QRCodeServlet extends HttpServlet {
             Book book = bookDAO.findById(bookId);
             if (book == null) { res.sendError(404); return; }
 
-            // Build a URL that opens the website when scanned
-            // Use Railway URL if available, otherwise use the current server URL
+            // QR code contains the Railway URL - redirects to login page when scanned
+            // After login, user will be on the website
             String railwayUrl = System.getenv("RAILWAY_PUBLIC_DOMAIN");
             String baseUrl;
             if (railwayUrl != null && !railwayUrl.isEmpty()) {
                 baseUrl = "https://" + railwayUrl;
             } else {
-                // Fallback to current request URL
-                baseUrl = req.getScheme() + "://" + req.getServerName() +
-                          (req.getServerPort() != 80 && req.getServerPort() != 443 ? ":" + req.getServerPort() : "") +
-                          req.getContextPath();
+                // Hardcoded Railway URL as fallback
+                baseUrl = "https://cozy-adventure-production-cbe8.up.railway.app";
             }
 
-            // QR code contains a URL that opens the search page with the book
-            String content = baseUrl + "/search?bookId=" + bookId;
+            // QR code points to login page - user scans and gets redirected to login
+            String content = baseUrl + "/login";
             String base64 = QRCodeUtil.generateQRCodeBase64(content, 250, 250);
 
             res.setContentType("application/json");
