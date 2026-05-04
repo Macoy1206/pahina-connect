@@ -3,14 +3,14 @@ package com.pahinaconnect.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.pahinaconnect.dao.BookDAO;
+import com.pahinaconnect.model.Book;
+import com.pahinaconnect.util.QRCodeUtil;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import com.pahinaconnect.dao.BookDAO;
-import com.pahinaconnect.model.Book;
-import com.pahinaconnect.util.QRCodeUtil;
 
 public class QRCodeServlet extends HttpServlet {
 
@@ -62,7 +62,21 @@ public class QRCodeServlet extends HttpServlet {
             Book book = bookDAO.findById(bookId);
             if (book == null) { res.sendError(404); return; }
 
-            String content = QRCodeUtil.buildBookQRContent(book.getId(), book.getIsbn(), book.getTitle());
+            // Build a URL that opens the website when scanned
+            // Use Railway URL if available, otherwise use the current server URL
+            String railwayUrl = System.getenv("RAILWAY_PUBLIC_DOMAIN");
+            String baseUrl;
+            if (railwayUrl != null && !railwayUrl.isEmpty()) {
+                baseUrl = "https://" + railwayUrl;
+            } else {
+                // Fallback to current request URL
+                baseUrl = req.getScheme() + "://" + req.getServerName() +
+                          (req.getServerPort() != 80 && req.getServerPort() != 443 ? ":" + req.getServerPort() : "") +
+                          req.getContextPath();
+            }
+
+            // QR code contains a URL that opens the search page with the book
+            String content = baseUrl + "/search?bookId=" + bookId;
             String base64 = QRCodeUtil.generateQRCodeBase64(content, 250, 250);
 
             res.setContentType("application/json");
